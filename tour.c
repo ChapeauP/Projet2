@@ -3,18 +3,10 @@
 #include <math.h>
 #include "tour.h"
 #include "town.h"
-
-struct Tour_p{
-	void *Town;
-	struct Tour_p *next_town;
-};
-struct Tour_t{
-	TourPosition *town_s;
-	TourPosition *town_f;
-	int tour_size;
-};
+#include "tsp.h"
 
 Tour *createEmptyTour(void){
+	
 	Tour *tr = malloc(sizeof(Tour));
 	if(!tr){
 		printf("impossible d'allouer la memoire\n");
@@ -27,20 +19,17 @@ Tour *createEmptyTour(void){
 }
 
 Tour *createTourFromFile(char *filename){
-
 	FILE *fp = fopen(filename,"r");
 	if(!fp){
 		printf("impossible d'ouvrir le fichier\n");
 		return NULL;
 	}
 	Tour *tr=createEmptyTour();
-	while(1){
+	while(feof(fp) == 0){
 		double x,y;
 		char name;
-		fscanf(fp,"%s,%lf,%lf",&name,&x,&y);
-		if(name=='\0'){
-			break;
-		}
+		char tmp;
+		fscanf(fp,"%s %lf %lf %c",&name,&x,&y,&tmp);
 		const char *namec = &name;
 		Town *t = createTown(namec,x,y);
 		TourPosition *tn = malloc(sizeof(TourPosition));
@@ -61,6 +50,7 @@ Tour *createTourFromFile(char *filename){
 	}
 	tr->town_f=tr->town_s;
 	fclose(fp);
+	return tr;
 }
 void freeTour(Tour *tour, int freetown){
 	TourPosition *tn = tour->town_s;
@@ -106,5 +96,3 @@ Town *getTownAtPosition(Tour *tour, TourPosition *pos){
 int getTourSize(Tour *tour){
 	return tour->tour_size;
 }
-
-int main(){}
