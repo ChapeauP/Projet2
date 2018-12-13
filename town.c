@@ -1,22 +1,16 @@
 #include "town.h"
+#include "tour.h"
+#include "tsp.h"
 #include <stdio.h>
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
 
-struct Town_t{
-	const char *name;
-	double x;
-	double y;
-
-};
-
-
 
 Town *createTown(const char *name, double x, double y){
 	assert(name != NULL);
 	Town *town = (Town*) malloc(sizeof(Town));
-	town->name = malloc(sizeof(name));
+	town->name = malloc(100*sizeof(char));
 	town->name = name;
 	town->x = x;
 	town->y = y;

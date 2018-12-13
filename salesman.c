@@ -1,3 +1,12 @@
+#include "town.h"
+#include "tour.h"
+#include "tsp.h"
+#include "easyppm.h"
+#include <stdio.h>
+#include <math.h>
+#include <assert.h>
+#include <stdlib.h>
+
 void ppmTour(Tour *tour, const char *ppmName, int size);
 
 void ppmTour(Tour *tour, const char *ppmName, int size) {
@@ -29,7 +38,7 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
     else if (currentY > maxY)
       maxY = currentY;
     
-    current = getNextTourPosition(tour, current);
+    current = getTourNextPosition(tour, current);
   }
   
   double xRange = maxX - minX;
@@ -53,7 +62,7 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
     prevX = (getTownX(getTownAtPosition(tour, current)) - minX)*sizex/xRange+5;
     prevY = (getTownY(getTownAtPosition(tour, current)) - minY)*sizey/yRange+5;
 	     
-    TourPosition *next = getNextTourPosition(tour, current);
+    TourPosition *next = getTourNextPosition(tour, current);
     if (next) {
       nextX = (getTownX(getTownAtPosition(tour, next)) - minX)*sizex/xRange+5;
       nextY = (getTownY(getTownAtPosition(tour, next)) - minY)*sizey/yRange+5;
