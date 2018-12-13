@@ -5,7 +5,7 @@
 #include "tour.h"
 #include "tsp.h"
 
-extern int recu_i = 0;
+int recu_i = 0;
 
 TourPosition *recu_get_town(Tour *tour, TourPosition *tour_p, int num_town){
 	if(num_town > tour->tour_size){
@@ -26,15 +26,13 @@ Tour *heuristic1(Tour *tour){
 	t->town_s->next_town = NULL;
 	t->town_f->next_town = NULL;
 	t->tour_size = 1;
-	for (int i = 0; i < tour->tour_size; ++i)
-	{
+	for (int i = 0; i < tour->tour_size; ++i){
 		recu_i = 0;
 		TourPosition *Town_ref = malloc(sizeof(TourPosition));
 		Town_ref = recu_get_town(tour, tour->town_s, i);
 		double d_ref;
 		int town_pos;
-		for (int j = 0; j < t->tour_size; ++j)
-		{
+		for (int j = 0; j < t->tour_size; ++j){
 			if(t->tour_size == 1){
 				t->town_s->next_town = tour->town_s->next_town;
 				d_ref = distanceBetweenTowns(t->town_s->Town,t->town_s->next_town->Town);
@@ -56,11 +54,11 @@ Tour *heuristic1(Tour *tour){
 	return t;
 }
 
+Tour *heuristic2(Tour *tour){
+	Tour *t;
 
-Tour *heuristic2(Tour *tour){}
+}
 
 
 int main(){
-	Tour *t = createTourFromFile("doc.txt");
-	printf("%d\n",t->tour_size);
-}
+	Tour *t = createTourFromFile("xy-belgium-towns.csv");
