@@ -54,7 +54,6 @@ Tour *heuristic1(Tour *tour){
 	return t;
 }
 
-
 Tour *heuristic2(Tour *tour){
 	Tour *t;
 
@@ -63,5 +62,3 @@ Tour *heuristic2(Tour *tour){
 
 int main(){
 	Tour *t = createTourFromFile("xy-belgium-towns.csv");
-	printf("%d\n",t->tour_size);
-}

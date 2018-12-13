@@ -96,3 +96,4 @@ Town *getTownAtPosition(Tour *tour, TourPosition *pos){
 int getTourSize(Tour *tour){
 	return tour->tour_size;
 }
+
