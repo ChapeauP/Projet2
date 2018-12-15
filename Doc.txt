@@ -1,0 +1,3 @@
+Liege 1 0
+Visé 0 1
+Bruxelles 0 0

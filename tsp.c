@@ -7,7 +7,7 @@
 
 int recu_i = 0;
 
-TourPosition *recu_get_town(Tour *tour, TourPosition *tour_p, int num_town){
+/*TourPosition *recu_get_town(Tour *tour, TourPosition *tour_p, int num_town){
 	if(num_town > tour->tour_size){
 		printf("le tour ne contient pas cette position\n");
 		return NULL;
@@ -18,18 +18,20 @@ TourPosition *recu_get_town(Tour *tour, TourPosition *tour_p, int num_town){
 	}
 	return tour_p;
 }
+*/
 
 Tour *heuristic1(Tour *tour){
-	Tour *t;
+	Tour *t=createEmptyTour();
 	t->town_s = tour->town_s;
-	t->town_f = tour->town_s;
-	t->town_s->next_town = NULL;
-	t->town_f->next_town = NULL;
-	t->tour_size = 1;
+	t->tour_size++;
+	TourPosition *Town_ref = malloc(sizeof(TourPosition));
 	for (int i = 0; i < tour->tour_size; ++i){
-		recu_i = 0;
-		TourPosition *Town_ref = malloc(sizeof(TourPosition));
-		Town_ref = recu_get_town(tour, tour->town_s, i);
+		/*recu_i = 0;
+		Town_ref = recu_get_town(tour, tour->town_s, i);*/
+		if(i == 0){
+			Town_ref = getTourStartPosition(tour);
+		}
+		Town_ref = getTourNextPosition(tour,Town_ref);
 		double d_ref;
 		int town_pos;
 		for (int j = 0; j < t->tour_size; ++j){
@@ -39,17 +41,23 @@ Tour *heuristic1(Tour *tour){
 			}
 			else{
 				recu_i = 0;
-				TourPosition *town_comp = recu_get_town(t,t->town_s,j);
+				TourPosition *town_comp = malloc(sizeof(TourPosition));
+				/*town_comp = recu_get_town(t,t->town_s,j);*/
+				if(j == 0){
+					town_comp = getTourStartPosition(t);
+				}
+				town_comp = getTourNextPosition(t,town_comp);
 				double dis = distanceBetweenTowns(Town_ref->Town,town_comp->Town);
+				printf("%lf\n",dis );
 				if(d_ref > dis){
 					d_ref = dis;
-					town_pos = j;
 				}
 			}
 		}
-		recu_i = 0;
-		recu_get_town(t,t->town_s,town_pos)->next_town = Town_ref;
 		t->tour_size++;
+		/*recu_i = 0;
+		recu_get_town(t,t->town_s,town_pos)->next_town = Town_ref;
+		*/
 	}
 	return t;
 }
@@ -61,4 +69,13 @@ Tour *heuristic2(Tour *tour){
 
 
 int main(){
-	Tour *t = createTourFromFile("xy-belgium-towns.csv");
+	Tour *t = createTourFromFile("Doc.txt");
+	t = heuristic1(t);
+}
+
+
+
+
+
+
+

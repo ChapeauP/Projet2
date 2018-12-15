@@ -26,6 +26,7 @@ double getTownY(Town *town){
 }
 
 const char *getTownName(Town *town){
+	printf("bla\n");
 	return town->name;
 }
 
