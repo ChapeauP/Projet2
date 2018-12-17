@@ -5,77 +5,69 @@
 #include "tour.h"
 #include "tsp.h"
 
-int recu_i = 0;
-
-/*TourPosition *recu_get_town(Tour *tour, TourPosition *tour_p, int num_town){
-	if(num_town > tour->tour_size){
-		printf("le tour ne contient pas cette position\n");
-		return NULL;
-	}
-	if(recu_i < num_town){
-		recu_get_town(tour, tour_p->next_town,num_town);
-		recu_i++;
-	}
-	return tour_p;
-}
-*/
 
 Tour *heuristic1(Tour *tour){
 	Tour *t=createEmptyTour();
 	t->town_s = tour->town_s;
-	t->tour_size++;
+	t->tour_size = 1;
 	TourPosition *Town_ref = malloc(sizeof(TourPosition));
-	for (int i = 0; i < tour->tour_size; ++i){
-		/*recu_i = 0;
-		Town_ref = recu_get_town(tour, tour->town_s, i);*/
+	for (int i = 0; i < tour->tour_size-2; ++i){
+		TourPosition *tmp = malloc(sizeof(TourPosition));
+		printf("i=%d\n",i);
 		if(i == 0){
-			Town_ref = getTourStartPosition(tour);
+			Town_ref = getTourNextPosition(tour,tour->town_s->next_town);
 		}
-		Town_ref = getTourNextPosition(tour,Town_ref);
-		double d_ref;
-		int town_pos;
+		else{
+			Town_ref = getTourNextPosition(tour,Town_ref);
+		}
+		double d_ref = 99999;
+		TourPosition *town_comp = malloc(sizeof(TourPosition));
 		for (int j = 0; j < t->tour_size; ++j){
+			printf("j=%d\n",j);
 			if(t->tour_size == 1){
-				t->town_s->next_town = tour->town_s->next_town;
+				addTownAfterTourPosition(t,getTourStartPosition(t),getTownAtPosition(tour,getTourStartPosition(t)->next_town));
 				d_ref = distanceBetweenTowns(t->town_s->Town,t->town_s->next_town->Town);
+				town_comp = getTourStartPosition(t);
+				t->tour_size = 2;
+				//printf("%lf %lf\n",getTownX(t->town_s->Town), getTownX(t->town_s->next_town->Town) );
 			}
 			else{
-				recu_i = 0;
-				TourPosition *town_comp = malloc(sizeof(TourPosition));
-				/*town_comp = recu_get_town(t,t->town_s,j);*/
-				if(j == 0){
-					town_comp = getTourStartPosition(t);
+				if(t->tour_size == 2 || j == 0){
+					town_comp= getTourStartPosition(t);
 				}
-				town_comp = getTourNextPosition(t,town_comp);
-				double dis = distanceBetweenTowns(Town_ref->Town,town_comp->Town);
-				printf("%lf\n",dis );
-				if(d_ref > dis){
+				else{
+					town_comp = getTourNextPosition(t,town_comp);
+				}
+				double dis = distanceBetweenTowns(getTownAtPosition(tour,Town_ref),getTownAtPosition(t,town_comp));
+				//printf("%lf\n",dis);
+				if(dis < d_ref){
 					d_ref = dis;
+					tmp = town_comp;
+					printf("%lf\n",d_ref);
+					//printf("%s\n",getTownName(getTownAtPosition(t,tmp)));
 				}
 			}
 		}
-		t->tour_size++;
-		/*recu_i = 0;
-		recu_get_town(t,t->town_s,town_pos)->next_town = Town_ref;
-		*/
+		addTownAfterTourPosition(t,tmp,getTownAtPosition(tour,Town_ref));
+		free(Town_ref);
+		if(t->tour_size < tour->tour_size){
+			t->tour_size++;
+		}
 	}
 	return t;
 }
 
-Tour *heuristic2(Tour *tour){
+/*Tour *heuristic2(Tour *tour){
 	Tour *t;
 
-}
+}*/
 
 
 int main(){
 	Tour *t = createTourFromFile("Doc.txt");
+	printf("%s\n",getTownName(getTownAtPosition(t,t->town_s)) );
 	t = heuristic1(t);
+	Town *tw = t->town_s->next_town->next_town->Town;
+	const char *n = getTownName(tw);
+	printf("%s\n",n );
 }
-
-
-
-
-
-
-

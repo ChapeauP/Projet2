@@ -1,3 +1,4 @@
 Liege 1 0
-Visé 0 1
-Bruxelles 0 0
+Visé 10 0
+Bruxelles 3 0
+Herstal 2 0

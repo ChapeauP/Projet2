@@ -26,15 +26,11 @@ double getTownY(Town *town){
 }
 
 const char *getTownName(Town *town){
-	printf("bla\n");
 	return town->name;
 }
 
 double distanceBetweenTowns(Town *town1, Town *town2){
-	double distance;
-
-	distance = hypot((town2->x-town1->x), (town2->y-town1->y));
-	return distance;
+	return hypot((getTownX(town1)-getTownX(town2)),getTownY(town1)-getTownY(town2));
 }
 
 void freeTown(Town *town){
