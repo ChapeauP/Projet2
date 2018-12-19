@@ -5,12 +5,13 @@
 #include <math.h>
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 
 Town *createTown(const char *name, double x, double y){
 	assert(name != NULL);
-	Town *town = (Town*) malloc(sizeof(Town));
-	town->name = malloc(100*sizeof(char));
+	Town *town = malloc(sizeof(Town));
+	town->name = malloc((strlen(name)+1));
 	town->name = name;
 	town->x = x;
 	town->y = y;

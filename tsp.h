@@ -5,3 +5,4 @@ Tour *heuristic1(Tour *tour);
 Tour *heuristic2(Tour *tour);
 
 #endif
+

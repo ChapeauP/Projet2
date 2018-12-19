@@ -25,28 +25,36 @@ Tour *createTourFromFile(char *filename){
 		return NULL;
 	}
 	Tour *tr=createEmptyTour();
-	while(feof(fp) == 0){
+	TourPosition *tn2 = malloc(sizeof(TourPosition));
+	char *name = malloc(256*sizeof(char));
+	char *nametmp = malloc(256*sizeof(char));
+	int i = 0;
+	while(1){
+		i++;
+		if(fgets(name,256,fp) == NULL){
+			break;
+		}
 		double x,y;
-		char *name = malloc(100*sizeof(char));
-		char tmp;
 		tr->tour_size++;
-		fscanf(fp,"%s %lf %lf\n",name,&x,&y);
-		const char *namec = name;
+		sscanf(name,"%s %lf %lf",nametmp,&x,&y);
+		//sscanf(name,"%[^,],%lf,%lf",nametmp,&x,&y);
+		const char *namec = nametmp;
 		Town *t = createTown(namec,x,y);
-		TourPosition *tn = malloc(sizeof(TourPosition));
 		TourPosition *tn2 = malloc(sizeof(TourPosition));
 		tn2->Town=t;
 		tn2->next_town=NULL;
 		if(tr->town_f){
-			tr->town_f->next_town = tn2;
+			addTownAfterTourPosition(tr,tr->town_f,t);
 		}
 		else{
-			tr->town_s=tn2;
+			tr->town_s = tn2;
 		}
-		tr->town_f=tn2;
-
+		tr->town_f = tn2;
 	}
-	tr->town_f=tr->town_s;
+	tn2->next_town = tr->town_s;
+	tr->town_f = tr->town_s;
+	free(name);
+	free(tn2);
 	fclose(fp);
 	return tr;
 }
@@ -89,5 +97,15 @@ Town *getTownAtPosition(Tour *tour, TourPosition *pos){
 }
 int getTourSize(Tour *tour){
 	return tour->tour_size;
+}
+double getTourLength(Tour *tour){
+	double Length = 0;
+	TourPosition *tp;
+	tp = getTourStartPosition(tour);
+	while(tp != getTourStartPosition(tour) || Length == 0){
+		Length += distanceBetweenTowns(getTownAtPosition(tour,tp),getTownAtPosition(tour,getTourNextPosition(tour,tp)));
+		tp = getTourNextPosition(tour,tp);
+	}
+	return Length;
 }
 
