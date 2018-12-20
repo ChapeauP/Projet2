@@ -12,8 +12,10 @@ Tour *createEmptyTour(void){
 		printf("impossible d'allouer la memoire\n");
 		return NULL;
 	}
-	tr->town_s= NULL;
-	tr->town_f= NULL;
+	tr->town_s= malloc(sizeof(TourPosition));
+	tr->town_f= malloc(sizeof(TourPosition));
+	tr->town_s=NULL;
+	tr->town_f=NULL;
 	tr->tour_size= 0;
 	return tr;
 }
@@ -25,15 +27,16 @@ Tour *createTourFromFile(char *filename){
 		return NULL;
 	}
 	Tour *tr=createEmptyTour();
-	while(feof(fp) == 0){
+	TourPosition *tn2 = malloc(sizeof(TourPosition));
+	char *name = malloc(256*sizeof(char));
+	char *nametmp = malloc(256*sizeof(char));
+	while(fgets(name,256,fp) != NULL){
 		double x,y;
-		char *name = malloc(100*sizeof(char));
-		char tmp;
 		tr->tour_size++;
-		fscanf(fp,"%s %lf %lf\n",name,&x,&y);
-		const char *namec = name;
+		//sscanf(name,"%s %lf %lf",nametmp,&x,&y);
+		sscanf(name,"%[^,],%lf,%lf",nametmp,&x,&y);
+		const char *namec = nametmp;
 		Town *t = createTown(namec,x,y);
-		TourPosition *tn = malloc(sizeof(TourPosition));
 		TourPosition *tn2 = malloc(sizeof(TourPosition));
 		tn2->Town=t;
 		tn2->next_town=NULL;
@@ -41,12 +44,11 @@ Tour *createTourFromFile(char *filename){
 			tr->town_f->next_town = tn2;
 		}
 		else{
-			tr->town_s=tn2;
+			tr->town_s = tn2;
 		}
-		tr->town_f=tn2;
-
+		tr->town_f = tn2;
 	}
-	tr->town_f=tr->town_s;
+	free(name);
 	fclose(fp);
 	return tr;
 }
@@ -66,6 +68,11 @@ void addTownAtTourEnd(Tour *tour, Town *town){
 	TourPosition *tn = malloc(sizeof(TourPosition));
 	tn->Town = town;
 	tn->next_town=NULL;
+			if(tour->tour_size == 0){
+			tour->town_s = tn;
+			tour->tour_size = 1;
+			return;
+	}
 	tour->town_f=tn;
 	tour->tour_size++;
 }
@@ -89,5 +96,16 @@ Town *getTownAtPosition(Tour *tour, TourPosition *pos){
 }
 int getTourSize(Tour *tour){
 	return tour->tour_size;
+}
+double getTourLength(Tour *tour){
+	double Length = 0;
+	TourPosition *tp;
+	tp = getTourStartPosition(tour);
+	while(tp->next_town !=NULL){
+		Length += distanceBetweenTowns(getTownAtPosition(tour,tp),getTownAtPosition(tour,getTourNextPosition(tour,tp)));
+		tp = getTourNextPosition(tour,tp);
+	}
+	Length += distanceBetweenTowns(getTownAtPosition(tour,tp),getTownAtPosition(tour,getTourStartPosition(tour)));
+	return Length;
 }
 

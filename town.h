@@ -2,7 +2,7 @@
 #define _TOWN_H
 
 typedef struct Town_t{
-	const char *name;
+	char *name;
 	double x;
 	double y;
 

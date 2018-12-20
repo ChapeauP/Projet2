@@ -8,12 +8,11 @@
 
 Tour *heuristic1(Tour *tour){
 	Tour *t=createEmptyTour();
-	t->town_s = tour->town_s;
+	addTownAtTourEnd(t,getTownAtPosition(tour,getTourStartPosition(tour)));
 	t->tour_size = 1;
 	TourPosition *Town_ref = malloc(sizeof(TourPosition));
 	for (int i = 0; i < tour->tour_size-2; ++i){
 		TourPosition *tmp = malloc(sizeof(TourPosition));
-		printf("i=%d\n",i);
 		if(i == 0){
 			Town_ref = getTourNextPosition(tour,tour->town_s->next_town);
 		}
@@ -23,7 +22,6 @@ Tour *heuristic1(Tour *tour){
 		double d_ref = 99999;
 		TourPosition *town_comp = malloc(sizeof(TourPosition));
 		for (int j = 0; j < t->tour_size; ++j){
-			printf("j=%d\n",j);
 			if(t->tour_size == 1){
 				addTownAfterTourPosition(t,getTourStartPosition(t),getTownAtPosition(tour,getTourStartPosition(t)->next_town));
 				d_ref = distanceBetweenTowns(t->town_s->Town,t->town_s->next_town->Town);
@@ -39,35 +37,39 @@ Tour *heuristic1(Tour *tour){
 					town_comp = getTourNextPosition(t,town_comp);
 				}
 				double dis = distanceBetweenTowns(getTownAtPosition(tour,Town_ref),getTownAtPosition(t,town_comp));
-				//printf("%lf\n",dis);
 				if(dis < d_ref){
 					d_ref = dis;
 					tmp = town_comp;
-					printf("%lf\n",d_ref);
 					//printf("%s\n",getTownName(getTownAtPosition(t,tmp)));
 				}
 			}
 		}
 		addTownAfterTourPosition(t,tmp,getTownAtPosition(tour,Town_ref));
-		free(Town_ref);
+		t->town_f = Town_ref;
 		if(t->tour_size < tour->tour_size){
 			t->tour_size++;
 		}
 	}
+	t->town_f = t->town_s;
 	return t;
 }
 
-/*Tour *heuristic2(Tour *tour){
-	Tour *t;
-
-}*/
-
-
 int main(){
-	Tour *t = createTourFromFile("Doc.txt");
-	printf("%s\n",getTownName(getTownAtPosition(t,t->town_s)) );
-	t = heuristic1(t);
-	Town *tw = t->town_s->next_town->next_town->Town;
-	const char *n = getTownName(tw);
-	printf("%s\n",n );
+	Tour *t1 = createTourFromFile("xy-belgium-towns.csv");
+	printf("%s\n",getTownName(getTownAtPosition(t1,getTourStartPosition(t1))));
+	printf("%s\n",getTownName(getTownAtPosition(t1,getTourNextPosition(t1,getTourStartPosition(t1)))));
+	printf("%s\n",getTownName(getTownAtPosition(t1,getTourNextPosition(t1,getTourNextPosition(t1,getTourStartPosition(t1))))));
+	double dis = getTourLength(t1);
+	printf("%lf\n",dis);
+	//freeTour(t1,1);
+	Tour *t2 = heuristic1(t1);
+	printf("%s\n",getTownName(getTownAtPosition(t2,getTourStartPosition(t2))));
+	printf("%s\n",getTownName(getTownAtPosition(t2,getTourNextPosition(t2,getTourStartPosition(t2)))));
+	printf("%s\n",getTownName(getTownAtPosition(t2,getTourNextPosition(t2,getTourNextPosition(t2,getTourStartPosition(t2))))));
+	double dis2 = getTourLength(t2);
+	printf("%lf\n",dis2);
+	//double dis2 = getTourLength(t2);
+	//printf("%lf\n",dis2);
+	free(t2);
+	free(t1);
 }

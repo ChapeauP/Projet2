@@ -21,5 +21,6 @@ TourPosition *getTourStartPosition(Tour *tour);
 TourPosition *getTourNextPosition(Tour *tour, TourPosition *pos);
 Town *getTownAtPosition(Tour *tour, TourPosition *pos);
 int getTourSize(Tour *tour);
+double getTourLength(Tour *tour);
 
 #endif
