@@ -6,6 +6,16 @@
 #include "town.h"
 #include "tsp.h"
 
+struct Tour_p{
+	Town *Town;
+	struct Tour_p *next_town;
+};
+struct Tour_t{
+	TourPosition *town_s;
+	TourPosition *town_f;
+	int tour_size;
+};
+
 Tour *createEmptyTour(void){
 	
 	Tour *tr = malloc(sizeof(Tour));
@@ -56,8 +66,8 @@ void freeTour(Tour *tour, int freetown){
 	TourPosition *tn = tour->town_s;
 	while(tn){
 		TourPosition *tnNext = tn->next_town;
-		if(freetown>=1 && tn->Town != NULL){
-			freeTown(tn->Town);
+		if(freetown>=1){
+			freeTown(getTownAtPosition(tour,tn));
 		}
 		free(tn);
 		tn=tnNext;
@@ -96,8 +106,6 @@ TourPosition *getNextTourPosition(Tour *tour, TourPosition *pos){
 Town *getTownAtPosition(Tour *tour, TourPosition *pos){
 	assert(tour != NULL && pos != NULL);
 	return pos->Town;
-	//Position de la ville dans le cas de tours diff????? peut etre changer les structs
-
 }
 int getTourSize(Tour *tour){
 	assert(tour != NULL);
@@ -112,7 +120,6 @@ double getTourLength(Tour *tour){
 		Length += distanceBetweenTowns(getTownAtPosition(tour,tp),getTownAtPosition(tour,getNextTourPosition(tour,tp)));
 		tp = getNextTourPosition(tour,tp);
 	}
-	Length += distanceBetweenTowns(getTownAtPosition(tour,tp),getTownAtPosition(tour,getTourStartPosition(tour)));
 	return Length;
 }
 

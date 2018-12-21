@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <time.h>
 #include "town.h"
 #include "tour.h"
 #include "tsp.h"
 
 
 Tour *heuristic1(Tour *tour){
-	assert(tour != NULL);
 	Tour *t=createEmptyTour();
 	addTownAtTourEnd(t,getTownAtPosition(tour,getTourStartPosition(tour)));
 	addTownAfterTourPosition(t,getTourStartPosition(t),getTownAtPosition(tour,getNextTourPosition(tour,getTourStartPosition(tour))));
@@ -36,10 +36,10 @@ Tour *heuristic1(Tour *tour){
 		addTownAfterTourPosition(t,town_closest, getTownAtPosition(tour, towntmp));
 		towntmp = getNextTourPosition(tour, towntmp);
 	}
+	addTownAfterTourPosition(t,towntmp2,getTownAtPosition(t,getTourStartPosition(t)));
 	return t;
 }
 Tour *heuristic2(Tour *tour){
-	assert(tour != NULL);
 	Tour *t=createEmptyTour();
 	addTownAtTourEnd(t,getTownAtPosition(tour,getTourStartPosition(tour)));
 	addTownAfterTourPosition(t,getTourStartPosition(t),getTownAtPosition(tour,getNextTourPosition(tour,getTourStartPosition(tour))));
@@ -72,25 +72,6 @@ Tour *heuristic2(Tour *tour){
 		}
 		addTownAfterTourPosition(t,town_closest, getTownAtPosition(tour, towntmp));
 	}
+	addTownAfterTourPosition(t,towntmp2,getTownAtPosition(t,getTourStartPosition(t)));
 	return t;
 }
-
-/*int main(){
-	Tour *t1 = createTourFromFile("xy-belgium-towns.csv");
-
-	printf("%d\n",t1->tour_size);
-	printf("%s\n",getTownName(getTownAtPosition(t1,getTourStartPosition(t1))));
-	printf("%s\n",getTownName(getTownAtPosition(t1,getNextTourPosition(t1,getTourStartPosition(t1)))));
-	printf("%s\n",getTownName(getTownAtPosition(t1,getNextTourPosition(t1,getNextTourPosition(t1,getTourStartPosition(t1))))));
-	double dis = getTourLength(t1);
-	printf("%lf\n",dis);
-	Tour *t2 = heuristic2(t1);
-	printf("%d\n",t2->tour_size);
-	printf("%s\n",getTownName(getTownAtPosition(t2,getTourStartPosition(t2))));
-	printf("%s\n",getTownName(getTownAtPosition(t2,getNextTourPosition(t2,getTourStartPosition(t2)))));
-	printf("%s\n",getTownName(getTownAtPosition(t2,getNextTourPosition(t2,getNextTourPosition(t2,getTourStartPosition(t2))))));
-	double dis2 = getTourLength(t2);
-	printf("%lf\n",dis2);
-	freeTour(t1,0);
-	freeTour(t2,0);
-}*/

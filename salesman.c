@@ -83,7 +83,13 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
 
 }
 int main(){
-  Tour *t = createTourFromFile("xy-belgium-towns.csv");
-  Tour *t2 = heuristic2(t);
-  ppmTour(t2, "doc.ppm", 1000);
+  Tour *t = createTourFromFile("villes-2000.txt");
+  Tour *t2 = heuristic1(t);
+  Tour *t3 = heuristic2(t);
+  ppmTour(t, "tour-default.ppm", 1000);
+  ppmTour(t2, "tour-heuristic1.ppm",1000);
+  ppmTour(t3,"tour-heuristic2.ppm",1000);
+  freeTour(t,0);
+  freeTour(t2,0);
+  freeTour(t3,0);
 }

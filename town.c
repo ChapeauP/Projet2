@@ -7,6 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct Town_t{
+	char *name;
+	double x;
+	double y;
+};
+
 
 Town *createTown(const char *name, double x, double y){
 	assert(name != NULL);

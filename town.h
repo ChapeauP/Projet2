@@ -1,12 +1,7 @@
 #ifndef _TOWN_H
 #define _TOWN_H
 
-typedef struct Town_t{
-	char *name;
-	double x;
-	double y;
-
-}Town;
+typedef struct Town_t Town;
 
 Town *createTown(const char *name, double x, double y);
 double getTownX(Town *town);
