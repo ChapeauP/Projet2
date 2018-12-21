@@ -4,13 +4,14 @@
 #include "easyppm.h"
 #include <stdio.h>
 #include <math.h>
+#include <tgmath.h>
 #include <assert.h>
 #include <stdlib.h>
 
 void ppmTour(Tour *tour, const char *ppmName, int size);
 
 void ppmTour(Tour *tour, const char *ppmName, int size) {
-
+  size = 1000;
   ppmcolor black = easyppm_rgb(0,0,0);
   ppmcolor white = easyppm_rgb(255,255,255);
        
@@ -38,7 +39,7 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
     else if (currentY > maxY)
       maxY = currentY;
     
-    current = getTourNextPosition(tour, current);
+    current = getNextTourPosition(tour, current);
   }
   
   double xRange = maxX - minX;
@@ -62,7 +63,7 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
     prevX = (getTownX(getTownAtPosition(tour, current)) - minX)*sizex/xRange+5;
     prevY = (getTownY(getTownAtPosition(tour, current)) - minY)*sizey/yRange+5;
 	     
-    TourPosition *next = getTourNextPosition(tour, current);
+    TourPosition *next = getNextTourPosition(tour, current);
     if (next) {
       nextX = (getTownX(getTownAtPosition(tour, next)) - minX)*sizex/xRange+5;
       nextY = (getTownY(getTownAtPosition(tour, next)) - minY)*sizey/yRange+5;
@@ -81,3 +82,8 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
   easyppm_destroy(&ppm);
 
 }
+/*int main(){
+  Tour *t = createTourFromFile("Doc.txt");
+  Tour *t2 = heuristic1(t);
+  ppmTour(t2, "Doc.txt", 1000);
+}*/

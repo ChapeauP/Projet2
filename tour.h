@@ -18,7 +18,7 @@ void freeTour(Tour *tour, int freetown);
 void addTownAtTourEnd(Tour *tour, Town *town);
 void addTownAfterTourPosition(Tour *tour, TourPosition *pos, Town *town);
 TourPosition *getTourStartPosition(Tour *tour);
-TourPosition *getTourNextPosition(Tour *tour, TourPosition *pos);
+TourPosition *getNextTourPosition(Tour *tour, TourPosition *pos);
 Town *getTownAtPosition(Tour *tour, TourPosition *pos);
 int getTourSize(Tour *tour);
 double getTourLength(Tour *tour);
