@@ -82,8 +82,8 @@ void ppmTour(Tour *tour, const char *ppmName, int size) {
   easyppm_destroy(&ppm);
 
 }
-/*int main(){
-  Tour *t = createTourFromFile("Doc.txt");
-  Tour *t2 = heuristic1(t);
-  ppmTour(t2, "Doc.txt", 1000);
-}*/
+int main(){
+  Tour *t = createTourFromFile("xy-belgium-towns.csv");
+  Tour *t2 = heuristic2(t);
+  ppmTour(t2, "doc.ppm", 1000);
+}

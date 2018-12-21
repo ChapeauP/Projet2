@@ -13,8 +13,6 @@ Tour *createEmptyTour(void){
 		printf("impossible d'allouer la memoire\n");
 		return NULL;
 	}
-	tr->town_s= malloc(sizeof(TourPosition));
-	tr->town_f= malloc(sizeof(TourPosition));
 	tr->town_s=NULL;
 	tr->town_f=NULL;
 	tr->tour_size= 0;
@@ -48,6 +46,7 @@ Tour *createTourFromFile(char *filename){
 		}
 		tr->town_f = tn2;
 	}
+	free(nametmp);
 	free(name);
 	fclose(fp);
 	return tr;
@@ -57,10 +56,10 @@ void freeTour(Tour *tour, int freetown){
 	TourPosition *tn = tour->town_s;
 	while(tn){
 		TourPosition *tnNext = tn->next_town;
-		if(freetown>=1){
+		if(freetown>=1 && tn->Town != NULL){
 			freeTown(tn->Town);
 		}
-		//free(tn);
+		free(tn);
 		tn=tnNext;
 	}
 	free(tour);
